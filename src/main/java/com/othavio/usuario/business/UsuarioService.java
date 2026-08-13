@@ -5,6 +5,7 @@ import com.othavio.usuario.business.dto.UsuarioDto;
 import com.othavio.usuario.infrastructure.entity.Usuario;
 import com.othavio.usuario.infrastructure.exceptions.ConflictException;
 import com.othavio.usuario.infrastructure.repository.UsuarioRepository;
+import com.othavio.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public UsuarioDto salvaUsuario(UsuarioDto usuarioDto) {
         emailExiste(usuarioDto.getEmail());
@@ -48,5 +50,17 @@ public class UsuarioService {
 
     public void deletaUsuarioPorEmail(String email) {
         usuarioRepository.deleteByEmail(email);
+    }
+
+    public UsuarioDto atualizaDadosUsuario(String token, UsuarioDto dto) {
+       String email = jwtUtil.extrairEmaildoToken(token.substring(7));
+       dto.setSenha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null);
+
+       Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(() ->
+               new UsernameNotFoundException("Email não localizado"));
+
+       Usuario usuario = usuarioConverter.updateUsuario(dto, usuarioEntity);
+
+       return usuarioConverter.paraUsuarioDTO(usuarioRepository.save(usuario));
     }
 }

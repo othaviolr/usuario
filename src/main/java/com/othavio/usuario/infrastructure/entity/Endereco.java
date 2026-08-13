@@ -1,9 +1,6 @@
 package com.othavio.usuario.infrastructure.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import jakarta.persistence.*;
 
@@ -13,6 +10,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "email")
+@Builder
 
 public class Endereco {
 

@@ -77,7 +77,7 @@ public class UsuarioConverter {
 
     public EnderecoDto paraEnderecoDTO(Endereco endereco) {
         return EnderecoDto.builder()
-                //.id(endereco.getId())
+                .id(endereco.getId())
                 .rua(endereco.getRua())
                 .numero(endereco.getNumero())
                 .cidade(endereco.getCidade())
@@ -93,7 +93,7 @@ public class UsuarioConverter {
 
     public TelefoneDto paraTelefoneDTO(Telefone telefone) {
         return TelefoneDto.builder()
-                //.id(telefone.getId())
+                .id(telefone.getId())
                 .numero(telefone.getNumero())
                 .ddd(telefone.getDdd())
                 .build();
@@ -107,6 +107,26 @@ public class UsuarioConverter {
                 .email(usuario.getEmail() != null ? usuario.getEmail() : entity.getEmail())
                 .enderecos(entity.getEnderecos())
                 .telefones(entity.getTelefones())
+                .build();
+    }
+
+    public Endereco upadateEndereco(EnderecoDto dto, Endereco entity) {
+        return Endereco.builder()
+                .id(entity.getId())
+                .rua(dto.getRua() != null ? dto.getRua() : entity.getRua())
+                .numero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero())
+                .cidade(dto.getCidade() != null ? dto.getCidade() : entity.getCidade())
+                .cep(dto.getCep() != null ? dto.getCep() : entity.getCep())
+                .complemento(dto.getComplemento() != null ? dto.getComplemento() : entity.getComplemento())
+                .estado(dto.getEstado() != null ? dto.getEstado() : entity.getEstado())
+                .build();
+    }
+
+    public Telefone updateTelefone(TelefoneDto dto, Telefone entity) {
+        return Telefone.builder()
+                .id(entity.getId())
+                .ddd(dto.getDdd() != null ? dto.getDdd() : entity.getDdd())
+                .numero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero())
                 .build();
     }
 }
